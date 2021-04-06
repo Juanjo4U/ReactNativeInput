@@ -14,10 +14,10 @@ const InputComponent = ({
     const input = ref || useRef();
     const [value, setValue] = useState<any>();
     const [isValid, setValid] = useState<boolean>();
-    const [secure, setSecure] = useState(false);
+    const [isSecure, setSecure] = useState(validations.type === 'password');
     const isValidationRequired = !!Object.keys(validations).length;
 
-    const toggleSecurity = () => setSecure(!secure);
+    const toggleSecurity = () => setSecure(!isSecure);
 
     const formatValue = (value: any): any => name ? ({ name, value }) : value;
 
@@ -48,9 +48,11 @@ const InputComponent = ({
             label={label}
             placeholder={placeholder}
             onChangeText={handleChange}
+            toggleSecurity={toggleSecurity}
             defaultValue={initialValue && initialValue + ''}
             value={value}
             isValid={isValid}
+            isSecure={isSecure}
         />
     )
 }
