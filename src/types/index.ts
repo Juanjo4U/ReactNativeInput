@@ -1,8 +1,11 @@
+import { ComponentType } from "react";
+import { TextInputProps } from "react-native";
+
 type AnyFunction = (...args: Array<any>) => any;
 type ValidationFunction = (...args: Array<any>) => boolean;
 
-export type inputValidationTypes = 'email' | 'password' | 'number' | 'float';
-export interface Validate {
+type inputValidationTypes = 'email' | 'password' | 'number' | 'float';
+export interface ValidationTypes {
     required?: boolean,
     minValue?: number,
     maxValue?: number,
@@ -14,6 +17,7 @@ export interface Validate {
     isValidating?: boolean
 }
 export interface InputPropsTypes {
+    component?: ComponentType<any>,
     name?: string,
     label?: string,
     placeholder?: string,
@@ -21,6 +25,8 @@ export interface InputPropsTypes {
     controledValue?: any,
     onChangeText?: AnyFunction,
     onSubmitEditing?: AnyFunction,
-    validations?: Validate,
+    validations?: ValidationTypes,
     [x: string]: any
 }
+
+export type ComponentWithForwardRefType = ComponentType<TextInputProps & InputPropsTypes>;

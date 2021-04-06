@@ -1,23 +1,58 @@
-import React, { forwardRef } from 'react';
+import React, { useEffect, useState, useRef, forwardRef, Ref } from 'react';
 import { TextInput } from "react-native";
-import { color } from '../colors';
-import { constants } from '../utils/constants';
+import MyInput from "./defaultInput";
+import { ComponentWithForwardRefType, InputPropsTypes } from '../types';
+import { validateInput } from "../utils/validations";
 
-const Input = ({
-    isValid, placeholder, label, style = {},
+const InputComponent = ({
+    component: Component = MyInput,
+    name, label, placeholder, initialValue = '', controledValue,
+    onChangeText = () => { }, onSubmitEditing = () => { },
+    validations = {},
     ...props
-}, ref) =>
-    <TextInput ref={ref} {...props}
-        style={{
-            color: color.text.primary,
-            borderWidth: constants.border.width,
-            borderRadius: constants.border.radius,
-            borderColor: color.border.primary,
-            ...isValid !== undefined &&
-            { borderColor: isValid ? color.success : color.error },
-            ...style
-        }}
-        placeholder={placeholder}
-    />
+}: InputPropsTypes, ref: Ref<TextInput>) => {
+    const input = ref || useRef();
+    const [value, setValue] = useState<any>();
+    const [isValid, setValid] = useState<boolean>();
+    const [secure, setSecure] = useState(false);
+    const isValidationRequired = !!Object.keys(validations).length;
 
-export default forwardRef(Input);
+    const toggleSecurity = () => setSecure(!secure);
+
+    const formatValue = (value: any): any => name ? ({ name, value }) : value;
+
+    const handleChange = (txt: any): any => {
+        setValue(txt + '');
+        if (isValidationRequired) {
+            let valid = validateInput(txt, validations);
+            setValid(valid);
+            if (valid) {
+                if (!isNaN(txt) && !!txt) txt = Number(txt);
+            } else txt = undefined;
+        }
+        onChangeText(formatValue(txt));
+    }
+
+    useEffect(() => {
+        if (validations.isValidating) {
+            handleChange(value || initialValue);
+        }
+    }, [validations.isValidating])
+
+    useEffect(() => {
+        if (controledValue !== undefined) handleChange(controledValue);
+    }, [controledValue])
+
+    return (
+        <Component ref={input} {...props}
+            label={label}
+            placeholder={placeholder}
+            onChangeText={handleChange}
+            defaultValue={initialValue && initialValue + ''}
+            value={value}
+            isValid={isValid}
+        />
+    )
+}
+
+export const Input: ComponentWithForwardRefType = forwardRef(InputComponent);
