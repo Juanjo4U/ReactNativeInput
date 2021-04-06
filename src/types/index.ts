@@ -1,5 +1,7 @@
-export type inputValidationTypes = 'email' | 'password' | 'number' | 'float';
+type AnyFunction = (...args: Array<any>) => any;
+type ValidationFunction = (...args: Array<any>) => boolean;
 
+export type inputValidationTypes = 'email' | 'password' | 'number' | 'float';
 export interface Validate {
     required?: boolean,
     minValue?: number,
@@ -8,11 +10,9 @@ export interface Validate {
     maxLength?: number,
     type?: inputValidationTypes,
     compare?: any,
+    myValidation?: ValidationFunction,
     isValidating?: boolean
 }
-
-type AnyFunction = (...args: Array<any>) => any;
-
 export interface InputPropsTypes {
     name?: string,
     label?: string,
@@ -21,5 +21,6 @@ export interface InputPropsTypes {
     controledValue?: any,
     onChangeText?: AnyFunction,
     onSubmitEditing?: AnyFunction,
-    validations?: Validate
+    validations?: Validate,
+    [x: string]: any
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, forwardRef, ComponentType, Ref } from 'react';
-import { TextInput } from "react-native";
+import { TextInput, TextInputProps } from "react-native";
 import MyInput from "./components";
 import { InputPropsTypes } from './types';
 import { validateInput } from "./utils/validations";
@@ -9,7 +9,7 @@ const InputComponent = ({
     onChangeText = () => { }, onSubmitEditing = () => { },
     validations = {},
     ...props
-}: InputPropsTypes, ref: Ref<TextInput>) => {
+}: TextInputProps & InputPropsTypes, ref: Ref<TextInput>) => {
     const input = ref || useRef();
     const [value, setValue] = useState<any>();
     const [isValid, setValid] = useState<boolean>();
@@ -54,4 +54,4 @@ const InputComponent = ({
     )
 }
 
-export const Input: ComponentType<InputPropsTypes> = forwardRef(InputComponent);
+export const Input: ComponentType<TextInputProps & InputPropsTypes> = forwardRef(InputComponent);

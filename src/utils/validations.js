@@ -2,7 +2,7 @@ const isEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))
 
 
 //// Validation Functions
-const validateNotEmpty = value => value !== '';
+const validateNotEmpty = value => !!value;
 
 const validateMinValue = (value, minValue) => !validateNotEmpty(value) || (value >= minValue);
 
@@ -32,8 +32,9 @@ export const validationType = {
 }
 
 const validateType = (value, type) => {
+    console.log("TYPE: ", type, value, !validateNotEmpty(value));
     if (!validateNotEmpty(value))
-        return true;
+        return false;
     switch (type) {
         case validationType.email:
             return validateEmail(value);
@@ -73,6 +74,13 @@ export const validateInput = (value, obj = {}) => {
             case 'compare':
                 status &= validateCompare(value, obj[key]);
                 break;
+            case 'myValidation': {
+                if (typeof obj[key] !== 'function') throw new Error(`myValidation must be type: FUNCTION`);
+                const result = obj[key](value);
+                if (typeof result !== 'boolean')
+                    throw new Error(`myValidation FUNCTION must return boolean`);
+                status &= result;
+            }
         }
     });
     return status;

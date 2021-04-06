@@ -4,7 +4,7 @@ import { color } from '../colors';
 import { constants } from '../utils/constants';
 
 const Input = ({
-    isValid, placeholder, label,
+    isValid, placeholder, label, style = {},
     ...props
 }, ref) =>
     <TextInput ref={ref} {...props}
@@ -15,6 +15,7 @@ const Input = ({
             borderColor: color.border.primary,
             ...isValid !== undefined &&
             { borderColor: isValid ? color.success : color.error },
+            ...style
         }}
         placeholder={placeholder}
     />
