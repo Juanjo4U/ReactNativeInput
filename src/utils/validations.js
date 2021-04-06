@@ -18,7 +18,7 @@ const validateFloat = value => !isNaN(value) && !!(value % 1);
 
 const validateEmail = value => isEmail.test(String(value).toLowerCase());
 
-const validatePassword = value => (!validateNotEmpty(value) || (validateMinLength(value, 4)));
+const validatePassword = value => (!validateNotEmpty(value) || (validateMinLength(value, 8)));
 
 const validateCompare = (value1, value2) => value1 === value2;
 
@@ -32,7 +32,6 @@ export const validationType = {
 }
 
 const validateType = (value, type) => {
-    console.log("TYPE: ", type, value, !validateNotEmpty(value));
     if (!validateNotEmpty(value))
         return false;
     switch (type) {
@@ -76,9 +75,8 @@ export const validateInput = (value, obj = {}) => {
                 break;
             case 'myValidation': {
                 if (typeof obj[key] !== 'function') throw new Error(`myValidation must be type: FUNCTION`);
-                const result = obj[key](value);
-                if (typeof result !== 'boolean')
-                    throw new Error(`myValidation FUNCTION must return boolean`);
+                const result = obj[key](value, obj);
+                if (typeof result !== 'boolean') throw new Error(`myValidation FUNCTION must return boolean`);
                 status &= result;
             }
         }

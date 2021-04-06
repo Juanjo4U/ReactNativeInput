@@ -1,6 +1,6 @@
 {
   "name": "@juanjo4u/react_native_input",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "input with validations",
   "main": "src/index.tsx",
   "scripts": {
