@@ -6,8 +6,8 @@ import { validateInput } from "./utils/validations";
 
 const InputComponent = ({
     name, label, placeholder, initialValue = '', controledValue,
-    onChangeText, onSubmitEditing,
-    validations,
+    onChangeText = () => { }, onSubmitEditing = () => { },
+    validations = {},
     ...props
 }: InputPropsTypes, ref: Ref<TextInput>) => {
     const input = ref || useRef();
